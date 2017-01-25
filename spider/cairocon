@@ -1,0 +1,37 @@
+#!/bin/sh
+
+
+FIFO=/tmp/cairo-main_controller.fifo
+OUT=/var/log/cairo-main_controller.log
+
+
+list() {
+        echo "commands:"
+        echo "log ... prints the complete server log"
+        echo "msg ... print the servers output"
+        echo "cmd ... execute a server command"
+}
+
+log() {
+        cat $OUT
+}
+
+msg() {
+        log | tail -n5
+}
+
+cmd() {
+        echo "$1" > $FIFO
+        msg
+}
+
+if [ $# -eq 1 ]; then
+        case $1 in
+                list) list  ;;
+                log)  log   ;;
+                msg)  msg   ;;
+                cmd)  cmd   ;;
+        esac
+else
+        list
+fi

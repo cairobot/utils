@@ -1,0 +1,79 @@
+#!/bin/sh
+
+
+### BEGIN INIT INFO
+# Provides:             cairo-serverstart
+# Required-Start:       $all $ntp $network
+# Required-Stop:        $all
+# Default-Start:        2 3 4 5
+# Default-Stop:         0 1 6
+# Short-Description:    Bootstraps cairo server
+# Description:          DESC
+### END INIT INFO
+
+
+MC_DIR=__INSTALL_DIR__/bin/
+PYEXEC=main_controller.py
+FIFO=/tmp/cairo-main_controller.fifo
+INFILE=$FIFO
+OUTFILE=/var/log/cairo-main_controller.log
+ERRFILE=/var/log/cairo-main_controller.log
+LOGFILE=$OUTFILE
+
+
+get_pid() {
+    ps -ax | grep python | grep -v python | grep -m1 python\ main_controller.py | grep -o '^\s*[0-9]\+' | grep -o '[0-9]\+'
+}
+
+start() {
+    pid=$(get_pid)
+    echo "$pid"
+    # already running, abort
+    if [ ! -z $pid ]; then
+        return
+    fi
+
+    cd "$MC_DIR"
+    if [ ! -e $INFILE ]; then
+        mkfifo $INFILE
+    fi
+
+    if [ -e $LOGFILE ]; then
+        if [ -e $LOGFILE.1 ]; then
+            rm $LOGFILE.1
+        fi
+        mv $LOGFILE $LOGFILE.1
+    fi
+    touch $LOGFILE
+    python "$PYEXEC" -p 11111 -i $INFILE -o $LOGFILE -e $LOGFILE -w "$MC_DIR"/walkfiles/ &
+    echo 'start' > $INFILE
+}
+
+stop() {
+    pid=$(get_pid)
+    if [ -z $pid ]; then
+        return
+    fi
+    echo 'exit' > $INFILE
+}
+
+restart() {
+    start
+    stop
+}
+
+status() {
+    pid=$(get_pid)
+    if [ -z "$pid" ]; then
+        echo 'not running'
+    else
+        echo 'running with pid: '"$pid"
+    fi
+}
+
+case "$1" in 
+    start)   start   ;;
+    stop)    stop    ;;
+    restart) restart ;;
+    status)  status  ;;
+esac
