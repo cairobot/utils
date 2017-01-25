@@ -1,0 +1,3 @@
+https://github.com/cairobot/main-controller.git
+https://github.com/cairobot/py-uart-lib.git
+https://github.com/cairobot/utils.git
