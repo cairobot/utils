@@ -22,6 +22,7 @@ done <"$REPOS_LIST"
 # create binary folder
 mkdir "$BIN_FOLDER"
 mkdir "$BIN_FOLDER/lib/"
+mkdir "$BIN_FOLDER/walkfiles/"
 
 # install main-controller python source
 cp -v main-controller/src/*.py "$BIN_FOLDER"

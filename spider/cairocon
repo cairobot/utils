@@ -10,6 +10,7 @@ list() {
         echo "log ... prints the complete server log"
         echo "msg ... print the servers output"
         echo "cmd ... execute a server command"
+        echo "stat .. show launch status"
 }
 
 log() {
@@ -25,12 +26,18 @@ cmd() {
         msg
 }
 
-if [ $# -eq 1 ]; then
+status() {
+        systemctl status cairo-serverstart
+}
+
+if [ $# -gt 0 ]; then
         case $1 in
-                list) list  ;;
-                log)  log   ;;
-                msg)  msg   ;;
-                cmd)  cmd   ;;
+                list) list     ;;
+                help) list     ;;
+                log)  log      ;;
+                msg)  msg      ;;
+                cmd)  cmd "$2" ;;
+                stat) status   ;;
         esac
 else
         list

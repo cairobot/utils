@@ -19,6 +19,7 @@ INFILE=$FIFO
 OUTFILE=/var/log/cairo-main_controller.log
 ERRFILE=/var/log/cairo-main_controller.log
 LOGFILE=$OUTFILE
+DEVICE=/dev/ttyUSB0
 
 
 get_pid() {
@@ -45,7 +46,7 @@ start() {
         mv $LOGFILE $LOGFILE.1
     fi
     touch $LOGFILE
-    python "$PYEXEC" -p 11111 -i $INFILE -o $LOGFILE -e $LOGFILE -w "$MC_DIR"/walkfiles/ &
+    python "$PYEXEC" -p 11111 -i $INFILE -o $LOGFILE -e $LOGFILE -d $DEVICE -w "$MC_DIR"/walkfiles/ &
     echo 'start' > $INFILE
 }
 
