@@ -53,6 +53,6 @@ cp -v utils/spider/cairocon /usr/local/bin/
 chmod 755 /usr/local/bin/cairocon
 
 # install walkfiles
-cp -v walkfiles/* "$WALK_FOLDER"
+# cp -v walkfiles/* "$WALK_FOLDER"
 
 # setup path
