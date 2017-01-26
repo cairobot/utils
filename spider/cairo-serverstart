@@ -12,7 +12,9 @@
 ### END INIT INFO
 
 
-MC_DIR=__INSTALL_DIR__/bin/
+INST_DIR='__INSTALL_DIR__'
+MC_DIR="$INST_DIR/bin/"
+WALK_DIR="$INST_DIR/walkfiles/"
 PYEXEC=main_controller.py
 FIFO=/tmp/cairo-main_controller.fifo
 INFILE=$FIFO
@@ -46,7 +48,7 @@ start() {
         mv $LOGFILE $LOGFILE.1
     fi
     touch $LOGFILE
-    python "$PYEXEC" -p 11111 -i $INFILE -o $LOGFILE -e $LOGFILE -d $DEVICE -w "$MC_DIR"/walkfiles/ &
+    python "$PYEXEC" -p 11111 -i $INFILE -o $LOGFILE -e $LOGFILE -d $DEVICE -w "$WALK_DIR" &
     echo 'start' > $INFILE
 }
 
