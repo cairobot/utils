@@ -6,7 +6,7 @@ REPOS_LIST="$PWD/repos.txt"
 
 INSTALL_DIR="$HOME/cairo/"
 BIN_FOLDER="$INSTALL_DIR/bin/"
-WALK_FOLDER="$INSTALL_DIR/walkfiles"
+WALK_FOLDER="$INSTALL_DIR/walkfiles/"
 
 
 
@@ -51,5 +51,8 @@ systemctl enable cairo-serverstart
 # install cairocon
 cp -v utils/spider/cairocon /usr/local/bin/
 chmod 755 /usr/local/bin/cairocon
+
+# install walkfiles
+cp -v walkfiles/* "$WALK_FOLDER"
 
 # setup path
