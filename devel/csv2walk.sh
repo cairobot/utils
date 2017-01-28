@@ -145,7 +145,7 @@ main() {
                 fi
                 echo -n '        >'
                 while [ $i -lt $len ]; do
-                        echo -n ${arr[i]},
+                        echo -n $load_step_dimension${arr[i]},
                         let i+=1
                 done
                 # echo 
