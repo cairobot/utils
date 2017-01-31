@@ -48,7 +48,7 @@ start() {
         mv $LOGFILE $LOGFILE.1
     fi
     touch $LOGFILE
-    python "$PYEXEC" -p 11111 -i $INFILE -o $LOGFILE -e $LOGFILE -d $DEVICE -w "$WALK_DIR" &
+    python "$PYEXEC" -p 11111 -d $DEVICE -w "$WALK_DIR" &
     echo 'start' > $INFILE
 }
 
