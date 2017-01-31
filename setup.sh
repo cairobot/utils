@@ -44,13 +44,18 @@ mv -v lib/* "$BIN_FOLDER/lib/"
 rm -r lib/
 
 # install init.d script (this starts the server on boot)
-cat utils/spider/cairo-serverstart | sed 's:__INSTALL_DIR__:'"$INSTALL_DIR"':' > /etc/init.d/cairo-serverstart
-chmod 755 /etc/init.d/cairo-serverstart
-systemctl enable cairo-serverstart
+# cat utils/spider/cairo-serverstart | sed 's:__INSTALL_DIR__:'"$INSTALL_DIR"':' > /etc/init.d/cairo-serverstart
+# chmod 755 /etc/init.d/cairo-serverstart
+# systemctl enable cairo-serverstart
+
+cat 'utils/spider/cairo-ifup' | sed 's:__INSTALL_DIR__:'"$INSTALL_DIR"':' > '/etc/network/if-up.d/cairo'
+chmod 755 '/etc/network/if-up.d/cairo'
+cat 'utils/spider/cairo-ifpostdown' | sed 's:__INSTALL_DIR__:'"$INSTALL_DIR"':' > '/etc/network/if-post-down.d/cairo'
+chmod 755 '/etc/network/if-post-down.d/cairo'
 
 # install cairocon
-cp -v utils/spider/cairocon /usr/local/bin/
-chmod 755 /usr/local/bin/cairocon
+# cp -v utils/spider/cairocon /usr/local/bin/
+# chmod 755 /usr/local/bin/cairocon
 
 # install walkfiles
 # cp -v walkfiles/* "$WALK_FOLDER"
