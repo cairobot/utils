@@ -2,13 +2,15 @@
 
 
 
-REPOS_LIST="$PWD/repos.txt"
+# cofig
+INSTALL_INITD='true'
+INSTALL_CAIROCON='true'
+INSTALL_NETD='false'
 
+REPOS_LIST="$PWD/repos.txt"
 INSTALL_DIR="$HOME/cairo/"
 BIN_FOLDER="$INSTALL_DIR/bin/"
 WALK_FOLDER="$INSTALL_DIR/walkfiles/"
-
-
 
 if [ ! -d "$INSTALL_DIR" ]; then
         mkdir "$INSTALL_DIR"
@@ -44,20 +46,26 @@ mv -v lib/* "$BIN_FOLDER/lib/"
 rm -r lib/
 
 # install init.d script (this starts the server on boot)
-# cat utils/spider/cairo-serverstart | sed 's:__INSTALL_DIR__:'"$INSTALL_DIR"':' > /etc/init.d/cairo-serverstart
-# chmod 755 /etc/init.d/cairo-serverstart
-# systemctl enable cairo-serverstart
+if [ $INSTALL_INITD = 'true' ]; then
+        cat utils/spider/cairo-serverstart | sed 's:__INSTALL_DIR__:'"$INSTALL_DIR"':' > /etc/init.d/cairo-serverstart
+        chmod 755 /etc/init.d/cairo-serverstart
+        systemctl enable cairo-serverstart
+fi
 
-cat 'utils/spider/cairo-ifup' | sed 's:__INSTALL_DIR__:'"$INSTALL_DIR"':' > '/etc/network/if-up.d/cairo'
-chmod 755 '/etc/network/if-up.d/cairo'
-cat 'utils/spider/cairo-ifpostdown' | sed 's:__INSTALL_DIR__:'"$INSTALL_DIR"':' > '/etc/network/if-post-down.d/cairo'
-chmod 755 '/etc/network/if-post-down.d/cairo'
+# install startup scripts for network
+if [ $INSTALL_NETD = 'true' ]; then
+        cat 'utils/spider/cairo-ifup' | sed 's:__INSTALL_DIR__:'"$INSTALL_DIR"':' > '/etc/network/if-up.d/cairo'
+        chmod 755 '/etc/network/if-up.d/cairo'
+        cat 'utils/spider/cairo-ifpostdown' | sed 's:__INSTALL_DIR__:'"$INSTALL_DIR"':' > '/etc/network/if-post-down.d/cairo'
+        chmod 755 '/etc/network/if-post-down.d/cairo'
+fi
 
 # install cairocon
-# cp -v utils/spider/cairocon /usr/local/bin/
-# chmod 755 /usr/local/bin/cairocon
+if [ $INSTALL_CAIROCON = 'true' ]; then
+        cp -v utils/spider/cairocon /usr/local/bin/
+        chmod 755 /usr/local/bin/cairocon
 
-# install walkfiles
-# cp -v walkfiles/* "$WALK_FOLDER"
-
+        install walkfiles
+        cp -v walkfiles/* "$WALK_FOLDER"
+fi
 # setup path

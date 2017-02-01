@@ -23,11 +23,11 @@ DEVICE='/dev/ttyUSB0'
 
 
 get_pid() {
-    ps -ax | grep python | grep -v python | grep -m1 python\ main_controller.py | grep -o '^\s*[0-9]\+' | grep -o '[0-9]\+'
+    ps -ax | grep python | grep -v grep | grep -m1 python\ main_controller.py | grep -o '^\s*[0-9]\+' | grep -o '[0-9]\+'
 }
 
 # only start if the process doesn't exist
-if [ ! -z $(get_pid) ]; then
+if [ -z $(get_pid) ]; then
         if [ ! -e "$INFILE" ]; then
                 mkfifo "$INFILE"
         fi

@@ -25,58 +25,56 @@ DEVICE=/dev/ttyUSB0
 
 
 get_pid() {
-    ps -ax | grep python | grep -v python | grep -m1 python\ main_controller.py | grep -o '^\s*[0-9]\+' | grep -o '[0-9]\+'
+        ps -ax | grep python | grep -v grep | grep -m1 python\ main_controller.py | grep -o '^\s*[0-9]\+' | grep -o '[0-9]\+'
 }
 
 start() {
-    pid=$(get_pid)
-    echo "$pid"
-    # already running, abort
-    if [ ! -z $pid ]; then
-        return
-    fi
-
-    cd "$MC_DIR"
-    if [ ! -e $INFILE ]; then
-        mkfifo $INFILE
-    fi
-
-    if [ -e $LOGFILE ]; then
-        if [ -e $LOGFILE.1 ]; then
-            rm $LOGFILE.1
+        # don't do anything if we are already running
+        if [ ! -z $(get_pid) ]; then
+                return
         fi
-        mv $LOGFILE $LOGFILE.1
-    fi
-    touch $LOGFILE
-    python "$PYEXEC" -p 11111 -d $DEVICE -w "$WALK_DIR" &
-    echo 'start' > $INFILE
+
+        # setup communication files
+        cd "$MC_DIR"
+        if [ ! -e $INFILE ]; then
+                mkfifo $INFILE
+        fi
+
+        if [ -e $LOGFILE ]; then
+                if [ -e $LOGFILE.1 ]; then
+                        rm $LOGFILE.1
+                fi
+                mv $LOGFILE $LOGFILE.1
+        fi
+        touch $LOGFILE
+
+        # do run
+        python "$PYEXEC" -p 11111 -d $DEVICE -w "$WALK_DIR" &
 }
 
 stop() {
-    pid=$(get_pid)
-    if [ -z $pid ]; then
-        return
-    fi
-    echo 'exit' > $INFILE
+        if [ -z $(get_pid) ]; then
+                return
+        fi
 }
 
 restart() {
-    start
-    stop
+        start
+        stop
 }
 
 status() {
-    pid=$(get_pid)
-    if [ -z "$pid" ]; then
-        echo 'not running'
-    else
-        echo 'running with pid: '"$pid"
-    fi
+        pid=$(get_pid)
+        if [ -z $pid ]; then
+                echo 'not running'
+        else
+                echo 'running with pid: '"$pid"
+        fi
 }
 
 case "$1" in 
-    start)   start   ;;
-    stop)    stop    ;;
-    restart) restart ;;
-    status)  status  ;;
+        start)   start   ;;
+        stop)    stop    ;;
+        restart) restart ;;
+        status)  status  ;;
 esac
