@@ -1,12 +1,6 @@
 #!/bin/sh
 
 
-
-# cofig
-INSTALL_INITD='true'
-INSTALL_CAIROCON='true'
-INSTALL_NETD='false'
-
 REPOS_LIST="$PWD/repos.txt"
 INSTALL_DIR="$HOME/cairo/"
 BIN_FOLDER="$INSTALL_DIR/bin/"
@@ -16,14 +10,11 @@ if [ -d "$INSTALL_DIR" ]; then
         rm -r "$INSTALL_DIR"
 fi
 
-if [ -e /etc/init.d/cairo-serverstart ]; then
-        rm /etc/init.d/cairo-serverstart
+if [ -f /etc/systemd/system/cairo ]; then
+        systemctl disable cairo
+        rm /etc/systemd/system/cairo
 fi
 
-if [ -e /etc/network/if-up.d/cairo ]; then
-        rm /etc/network/if-up.d/cairo
-fi
-
-if [ -e /etc/network/if-post-down.d/cairo ]; then
-        rm /etc/network/if-post-down.d/cairo
+if [ -f /usr/local/bin/cairocon ]; then
+        rm /usr/local/bin/cairocon
 fi

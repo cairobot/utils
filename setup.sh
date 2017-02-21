@@ -2,10 +2,7 @@
 
 
 
-# cofig
-INSTALL_INITD='true'
-INSTALL_CAIROCON='true'
-INSTALL_NETD='false'
+# config
 
 REPOS_LIST="$PWD/repos.txt"
 INSTALL_DIR="$HOME/cairo/"
@@ -46,26 +43,35 @@ mv -v lib/* "$BIN_FOLDER/lib/"
 rm -r lib/
 
 # install init.d script (this starts the server on boot)
-if [ $INSTALL_INITD = 'true' ]; then
-        cat utils/spider/cairo-serverstart | sed 's:__INSTALL_DIR__:'"$INSTALL_DIR"':' > /etc/init.d/cairo-serverstart
-        chmod 755 /etc/init.d/cairo-serverstart
-        systemctl enable cairo-serverstart
-fi
+# if [ $INSTALL_INITD = 'true' ]; then
+#         cat utils/spider/cairo-serverstart | sed 's:__INSTALL_DIR__:'"$INSTALL_DIR"':' > /etc/init.d/cairo-serverstart
+#         chmod 755 /etc/init.d/cairo-serverstart
+#         systemctl enable cairo-serverstart
+# fi
 
-# install startup scripts for network
-if [ $INSTALL_NETD = 'true' ]; then
-        cat 'utils/spider/cairo-ifup' | sed 's:__INSTALL_DIR__:'"$INSTALL_DIR"':' > '/etc/network/if-up.d/cairo'
-        chmod 755 '/etc/network/if-up.d/cairo'
-        cat 'utils/spider/cairo-ifpostdown' | sed 's:__INSTALL_DIR__:'"$INSTALL_DIR"':' > '/etc/network/if-post-down.d/cairo'
-        chmod 755 '/etc/network/if-post-down.d/cairo'
-fi
+# # install startup scripts for network
+# if [ $INSTALL_NETD = 'true' ]; then
+#         cat 'utils/spider/cairo-ifup' | sed 's:__INSTALL_DIR__:'"$INSTALL_DIR"':' > '/etc/network/if-up.d/cairo'
+#         chmod 755 '/etc/network/if-up.d/cairo'
+#         cat 'utils/spider/cairo-ifpostdown' | sed 's:__INSTALL_DIR__:'"$INSTALL_DIR"':' > '/etc/network/if-post-down.d/cairo'
+#         chmod 755 '/etc/network/if-post-down.d/cairo'
+# fi
 
-# install cairocon
-if [ $INSTALL_CAIROCON = 'true' ]; then
-        cp -v utils/spider/cairocon /usr/local/bin/
-        chmod 755 /usr/local/bin/cairocon
+# # install cairocon
+# if [ $INSTALL_CAIROCON = 'true' ]; then
+#         cp -v utils/spider/cairocon /usr/local/bin/
+#         chmod 755 /usr/local/bin/cairocon
 
-        install walkfiles
-        cp -v walkfiles/* "$WALK_FOLDER"
-fi
+#         install walkfiles
+#         cp -v walkfiles/* "$WALK_FOLDER"
+# fi
 # setup path
+
+
+# install systemd unit
+cp 'utils/spider/cairo-service' '/etc/systemd/system/cairo.service'
+systemctl enable cairo
+
+# install control script
+cat 'utils/spider/cairocon'  | sed 's:__INSTALL_DIR__:'"$INSTALL_DIR"':' > '/usr/local/bin/cairocon'
+chmod 755 '/usr/local/bin/cairocon'
