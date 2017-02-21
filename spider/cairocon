@@ -59,6 +59,15 @@ start() {
         fi
         touch "$LOGFILE"
 
+        # wait for connection
+        local online=false
+        while [ $online = false ]; do
+                wget -q --tries=10 --timeout=20 -O --spider http://www.google.com 2>&1 1>/dev/null
+                if [ $? -eq 0 ]; then
+                        online=true
+                fi
+        done
+
         # do run
         cd "$BIN_DIR"
         python3 "$PYEXEC" -p 11111 -d $DEVICE -w "$WALK_DIR" & 2>&1 1>/dev/null
