@@ -10,9 +10,9 @@ if [ -d "$INSTALL_DIR" ]; then
         rm -r "$INSTALL_DIR"
 fi
 
-if [ -f /etc/systemd/system/cairo ]; then
+if [ -f /etc/systemd/system/cairo.service ]; then
         systemctl disable cairo
-        rm /etc/systemd/system/cairo
+        rm /etc/systemd/system/cairo.service
 fi
 
 if [ -f /usr/local/bin/cairocon ]; then

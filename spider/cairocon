@@ -19,6 +19,7 @@ PYEXEC='main_controller.py'
 INFILE='/tmp/cairo-main_controller.fifo'
 OUTFILE='/var/log/cairo-main_controller.log'
 ERRFILE='/var/log/cairo-main_controller.log'
+LOGFILE="$ERRFILE"
 DEVICE='/dev/ttyUSB0'
 
 
@@ -46,21 +47,21 @@ start() {
         fi
 
         # setup communication files
-        if [ ! -e $INFILE ]; then
-                mkfifo $INFILE
+        if [ ! -e "$INFILE" ]; then
+                mkfifo "$INFILE"
         fi
 
-        if [ -e $LOGFILE ]; then
-                if [ -e $LOGFILE.1 ]; then
-                        rm $LOGFILE.1
+        if [ -e "$LOGFILE" ]; then
+                if [ -e $"LOGFILE.1" ]; then
+                        rm "$LOGFILE.1"
                 fi
-                mv $LOGFILE $LOGFILE.1
+                mv "$LOGFILE" "$LOGFILE.1"
         fi
-        touch $LOGFILE
+        touch "$LOGFILE"
 
         # do run
         cd "$BIN_DIR"
-        python "$PYEXEC" -p 11111 -d $DEVICE -w "$WALK_DIR" -i "$INFILE" -o "$OUTFILE" -e "$ERRFILE" & 2>&1 1>/dev/null
+        python3 "$PYEXEC" -p 11111 -d $DEVICE -w "$WALK_DIR" & 2>&1 1>/dev/null
 }
 
 stop() {
