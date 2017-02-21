@@ -49,7 +49,7 @@ start() {
         touch $LOGFILE
 
         # do run
-        python "$PYEXEC" -p 11111 -d $DEVICE -w "$WALK_DIR" &
+        python "$PYEXEC" -p 11111 -d $DEVICE -w "$WALK_DIR" & 2>&1 1>/dev/null
 }
 
 stop() {

@@ -25,6 +25,7 @@ main() {
         local prg_tick='100'
         local prg_use='prg'
         local prg_speed='1000'
+        local prg_looping='true'
 
         local load_step_dimension=''
         local load_last_time='0'
@@ -65,6 +66,12 @@ main() {
                                 case "$OPTARG" in
                                         ''|*[!0-9]*) error "Error: expected a number" ;;
                                         *) prg_speed="$OPTARG" ;;
+                                esac
+                        ;;
+                        l)
+                                case "$OPTARG" in
+                                        true|True|TRUE|1|yes|Yes|YES) prg_looping='true' ;;
+                                        *) prg_looping='false' ;;
                                 esac
                         ;;
                         a)
@@ -112,6 +119,7 @@ main() {
         echo '        Tick='"$prg_tick"
         echo '        Use='"$prg_use"
         echo '        Speed='"$prg_speed"
+        echo '        Looping=true'
         echo '[end]'
         echo ''
         echo '# default setup instruction, change if the position of the legs'
@@ -126,7 +134,7 @@ main() {
         echo '[prg]'
 
         IFS="$load_sep"
-        while read -r instruction; do
+        while read -r instruction | [ -n $instruction ]; do
                 # remove the \r bc excel inserts it into the file,
                 # we don't need it (it actually fucks up the output)
                 instruction="$(echo "$instruction" | tr -d '\r')"
