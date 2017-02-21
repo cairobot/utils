@@ -5,8 +5,8 @@ Wants=network-online.target
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/cairocon start
-ExecStop=/usr/bin/cairocon stop
+ExecStart=/usr/local/bin/cairocon start
+ExecStop=/usr/local/bin/cairocon stop
 RemainAfterExit=yes
 
 

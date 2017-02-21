@@ -60,7 +60,7 @@ start() {
 
         # do run
         cd "$BIN_DIR"
-        python "$PYEXEC" -p 11111 -d $DEVICE -w "$WALK_DIR" & 2>&1 1>/dev/null
+        python "$PYEXEC" -p 11111 -d $DEVICE -w "$WALK_DIR" -i "$INFILE" -o "$OUTFILE" -e "$ERRFILE" & 2>&1 1>/dev/null
 }
 
 stop() {
