@@ -20,7 +20,7 @@ INFILE='/tmp/cairo-main_controller.fifo'
 OUTFILE='/var/log/cairo-main_controller.log'
 ERRFILE='/var/log/cairo-main_controller.log'
 LOGFILE="$ERRFILE"
-DEVICE='/dev/ttyUSB0'
+DEVICE='/dev/ttyS2'
 
 
 get_pid() {
