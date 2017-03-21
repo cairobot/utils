@@ -134,9 +134,10 @@ main() {
         echo '[prg]'
 
         IFS="$load_sep"
-        while read -r instruction | [ -n $instruction ]; do
+        while read -r instruction; do #| [ -n $instruction ]; do
                 # remove the \r bc excel inserts it into the file,
                 # we don't need it (it actually fucks up the output)
+                # echo ">>INST: $instruction"
                 instruction="$(echo "$instruction" | tr -d '\r')"
                 local arr=( $instruction )
                 local len=${#arr[@]}
@@ -160,8 +161,6 @@ main() {
                 let timediff=${arr[0]}-$load_last_time
                 load_last_time=${arr[0]}
                 echo ':'"$timediff"
-
-
         done
         # end the prg instructions
         echo '[end]'
